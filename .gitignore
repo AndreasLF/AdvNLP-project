@@ -1,0 +1,9 @@
+CTenv/
+venv/
+datasets/
+__pycache__/
+
+# Ignore all pycache folders
+**/__pycache__/
+
+pickled_models/
