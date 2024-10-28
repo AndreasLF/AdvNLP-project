@@ -20,7 +20,6 @@ device = ('cuda' if torch.cuda.is_available() else 'cpu')
 # EXPERIMENT CONFIGURATION
 config = configparser.ConfigParser()
 config.read('configs/config.ini')
-data_loader = DataLoader(config)
 
 top_k = 25
 test_split = 0.2
@@ -61,6 +60,21 @@ def getPreComputedEmbeddingsPath(dataset: str, embedding_index_folder_path: str)
     return os.path.join(embedding_index_folder_path,dataset,"embedding_index.pickle")
 
 # %%
+def CreatePhishingDataset(datasets_path: str, save: bool = True):
+    dataset = LoadPhishingDataset(datasets_path)
+    dataset.Shuffle()
+    if save:
+        with open("data/datasets/phishing_dataset.pickle", 'wb') as f:
+            pickle.dump(dataset, f)
+    return dataset
+
+def LoadPrecomputedPhishingDataset(phishing_dataset_path: str):
+    # with open("data/datasets/phishing_dataset.pickle", 'rb') as f:
+    with open(phishing_dataset_path, 'rb') as f:
+        dataset = pickle.load(f)
+    return dataset
+
+
 if not os.path.exists(phishing_dataset_path):
     PhishingData = CreatePhishingDataset(datasets_path, save=True)
 PhishingData = LoadPrecomputedPhishingDataset(phishing_dataset_path)
